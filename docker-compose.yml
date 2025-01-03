@@ -27,19 +27,24 @@ services:
       context: .
       dockerfile: Dockerfile.celery
     container_name: celery_worker
+    user: "1000:1000"  # Specify a non-root user with ID 1000 (you can adjust as needed)
     depends_on:
       postgres:
         condition: service_healthy
       redis:
         condition: service_started
     environment:
-      - DATABASE_URL=postgresql://postgres:root@postgres:5432/fast_docker_db
+      - DATABASE_URL=postgresql://postgres:root@postgres:5432/f_db
       - DB_HOST=postgres
       - DB_PORT=5432
       - DB_USERNAME=postgres
       - POSTGRES_PASSWORD=root
-      - DB_NAME=fast_docker_db
+      - DB_NAME=f_db
       - GEMINI_API_KEY=AIzaSyBOzB-ZDrEILx7L2awkCXcuYggNmZSd-XM
+      - PYTHONUNBUFFERED=1
+      - REDIS_URL=redis://redis:6379/0
+      - CELERY_RESULT_BACKEND=redis://redis:6379/0
+
 
   redis:
     image: redis:7.0
