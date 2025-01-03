@@ -8,8 +8,6 @@ app = FastAPI()
 
 app.include_router(router=router)
 
-
-
 if __name__ == "__main__":
     init_db()
     uvicorn.run("main:app", reload=True)
