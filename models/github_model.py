@@ -1,23 +1,6 @@
-from typing import Optional, List
+from typing import Optional
 
-from pydantic import BaseModel
-from sqlmodel import SQLModel, Field, Relationship
-
-
-class PRTaskReview(SQLModel, table=True):
-    id: Optional[int] = Field(default=None, primary_key=True)
-    analysis_result: Optional[str] = None
-    status: Optional[str] = Field(default="pending")
-    task_id: Optional[str] = None
-
-    # Relationship to PullRequest
-    pull_requests: List["PullRequest"] = Relationship(back_populates="pr_task_review")
-
-
-class PullRequestPydantic(BaseModel):
-    repo_url: str
-    pr_number: int
-    github_token: str
+from sqlmodel import SQLModel, Field
 
 
 class PullRequest(SQLModel, table=True):
@@ -26,10 +9,7 @@ class PullRequest(SQLModel, table=True):
     pr_number: int
     github_token: str
     pr_changes: Optional[str] = None
-    pr_task_review_id: Optional[int] = Field(
-        default=None, foreign_key="prtaskreview.id"
-    )
+    pr_task_review_id: Optional[str] = None
     analysis_result: Optional[str] = None
-    pr_task_review: Optional[PRTaskReview] = Relationship(
-        back_populates="pull_requests"
-    )
+    status: Optional[str] = None
+
