@@ -1,5 +1,5 @@
 import time
-
+import os
 from celery import Celery, signals
 from sqlmodel import Session
 
@@ -12,9 +12,8 @@ from ai_model.gemini_code import (
 from models.database_engine import SessionLocal, engine
 from models.github_model import PullRequest
 
-celery = Celery(
-    __name__, broker="redis://0.0.0.0:6379/0", backend="redis://0.0.0.0:6379/0"
-)
+REDIS_URL = os.getenv("REDIS_URL")
+celery = Celery(__name__, broker=f"{REDIS_URL}", backend=f"{REDIS_URL}")
 
 
 @signals.task_prerun.connect
